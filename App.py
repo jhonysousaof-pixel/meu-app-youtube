@@ -53,7 +53,7 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                         st.warning("Nenhuma tag oculta encontrada neste vídeo específico.")
 
                 with tab2:
-                    # 2. Conectando à API do Gemini para recriar o conteúdo (Modelo Obrigatório Atual)
+                    # 2. Conectando à API do Gemini para recriar o conteúdo (Modelo Obrigatório Atualizado)
                     client = genai.Client(api_key=api_key)
                     
                     prompt_texto = f"""
@@ -70,7 +70,7 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     """
                     
                     response = client.models.generate_content(
-                        model='gemini-2.5-flash',
+                        model='gemini-3.8-flash',
                         contents=prompt_texto
                     )
                     
