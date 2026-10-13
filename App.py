@@ -82,7 +82,7 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                         desc_nova = resultado_ia.split("[DESCRICAO]")[1].split("[PROMPT_CAPA]")[0].strip()
                         prompt_capa = resultado_ia.split("[PROMPT_CAPA]")[1].strip()
                     except:
-                        titulos_novos = "Clique abaixo para ver o conteúdo gerado."
+                        titulos_novos = "Abra o texto abaixo para ver o conteúdo gerado."
                         desc_nova = resultado_ia
                         prompt_capa = "Modern YouTube thumbnail background about " + titulo_original
 
@@ -95,14 +95,15 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     st.subheader("📋 Prompt da Capa Gerado (Em Inglês)")
                     st.code(prompt_capa, language="")
 
-                    st.subheader("🖼️ Escaneie para Baixar sua Nova Capa")
-                    # Transforma o link da imagem em um QR Code limpo para o celular ler sem bloquear
+                    st.subheader("🖼️ Link de Texto da sua Nova Capa")
+                    # Cria o link da imagem limpando o texto de forma simples e direta
                     titulo_limpo = "".join(c for c in titulo_original if c.isalnum() or c==' ').replace(" ", "-")
                     url_da_imagem = f"https://pollinations.ai{titulo_limpo}?width=1280&height=720&nologo=true"
                     
-                    url_qr_code = f"https://qrserver.com{urllib.parse.quote(url_da_imagem)}"
-                    st.image(url_qr_code, caption="Tire um print desse QR Code e use o leitor do celular para abrir a imagem direto na galeria!")
+                    # Exibe o link bruto em formato de texto para você copiar e colar no Chrome do celular sem bloqueios
+                    st.info("Copie o endereço de texto abaixo e cole na barra de pesquisa do seu navegador para abrir a imagem:")
+                    st.code(url_da_imagem, language="")
 
             except Exception as e:
                 st.error(f"Ocorreu um erro ao processar o link. Verifique se a URL está correta. Detalhes: {e}")
-                        
+                
