@@ -72,7 +72,7 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     """
                     
                     response = client.models.generate_content(
-                        model='gemini-2.5-flash',
+                        model='gemini-3.8-flash',
                         contents=prompt_texto
                     )
                     
