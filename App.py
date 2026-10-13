@@ -1,5 +1,6 @@
 import streamlit as st
 import yt_dlp
+import requests
 import urllib.parse
 from google import genai
 
@@ -46,17 +47,17 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                         st.warning("Nenhuma tag oculta encontrada neste vídeo específico.")
 
                 with tab2:
-                    # Conexão com o modelo mais estável e leve do Gemini contra quedas
+                    # Conexão com o modelo oficial e obrigatório da Google
                     client = genai.Client(api_key=api_key)
                     prompt = f"Baseado no título '{titulo_orig}' e descrição '{desc_orig}', crie 3 novos títulos chamativos, uma descrição nova com SEO e um prompt em inglês de 1 parágrafo corrido para gerar uma capa conceitual no formato [TITULOS], [DESCRICAO], [PROMPT_CAPA]."
-                    response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+                    response = client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
                     
                     st.subheader("💡 Sugestões da IA")
                     st.write(response.text)
                     
                     st.subheader("🖼️ Nova Capa Sugerida")
                     
-                    # CORREÇÃO BLINDADA: Transforma o título em um link seguro e força a barra correta
+                    # Gera um link de imagem limpo e seguro usando formatação do Python
                     titulo_codificado = urllib.parse.quote(titulo_orig)
                     url_img = f"https://pollinations.ai{titulo_codificado}?width=1280&height=720&nologo=true"
                     
