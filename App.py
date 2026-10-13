@@ -39,17 +39,20 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
 
                 with tab2:
                     client = genai.Client(api_key=api_key)
-                    prompt = f"Baseado no título '{titulo_orig}' e descrição '{desc_orig}', crie 3 novos títulos chamativos, uma descrição nova com SEO e um prompt em inglês para gerar uma capa conceitual no formato [TITULOS], [DESCRICAO], [PROMPT_CAPA]."
-                    response = client.models.generate_content(model='gemini-3.8-flash', contents=prompt)
+                    prompt = f"Baseado no título '{titulo_orig}' e descrição '{desc_orig}', crie 3 novos títulos chamativos, uma descrição nova com SEO e um prompt em inglês de 1 parágrafo corrido para gerar uma capa conceitual no formato [TITULOS], [DESCRICAO], [PROMPT_CAPA]."
+                    response = client.models.generate_content(model='gemini-2.5-flash', contents=prompt)
                     
                     st.subheader("💡 Sugestões da IA")
                     st.write(response.text)
                     
                     st.subheader("🖼️ Nova Capa Sugerida")
-                    url_img = f"https://pollinations.ai{requests.utils.quote(titulo_orig)}?width=1280&height=720&nologo=true"
-                    st.markdown(f"[🖼️ Clique aqui para abrir e salvar sua Nova Capa]({url_img})")
-                    st.caption("Clique no link acima para abrir a imagem gerada em alta resolução e fazer o download.")
+                    # Cria um link limpo e curto sem caracteres especiais que quebram o navegador
+                    titulo_url = requests.utils.quote(titulo_orig)
+                    url_img = f"https://pollinations.ai{titulo_url}?width=1280&height=720&nologo=true"
+                    
+                    st.markdown(f"### [🖼️ CLIQUE AQUI PARA ABRIR E SALVAR SUA NOVA CAPA]({url_img})")
+                    st.caption("Clique no link azul acima para visualizar e fazer o download da imagem em alta resolução.")
 
             except Exception as e:
                 st.error(f"Erro ao processar: {e}")
-                    
+                
