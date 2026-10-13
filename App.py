@@ -99,7 +99,9 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     prompt_url = requests.utils.quote(prompt_capa)
                     url_imagem_ia = f"https://pollinations.ai{prompt_url}?width=1280&height=720&nologo=true"
                     
-                    st.image(url_imagem_ia, caption="Sua nova miniatura baseada no tema do vídeo original", use_column_width=True)
+                            st.markdown(f"[🖼️ Clique aqui para abrir e salvar sua Nova Capa]({url_imagem_ia})")
+        st.caption("Clique no link acima para abrir a imagem gerada em alta resolução e fazer o download.")
+        
 
             except Exception as e:
                 st.error(f"Ocorreu um erro ao processar o link. Verifique se a URL está correta. Detalhes: {e}")
