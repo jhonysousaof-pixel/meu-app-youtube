@@ -1,10 +1,8 @@
 import streamlit as st
 import yt_dlp
-import requests
-import urllib.parse
 from google import genai
 
-# Configuração da página do site (Versão Clássica)
+# Configuração da página do site (Versão Clássica que você aprovou)
 st.set_page_config(page_title="Modelador de Conteúdo YT", page_icon="🚀", layout="wide")
 
 st.title("🎬 Modelador e Validador de Conteúdo do YouTube")
@@ -34,7 +32,7 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     tags_originais = info.get('tags', [])
                     thumbnail_original = info.get('thumbnail', '')
 
-                # Criando as abas clássicas que você aprovou
+                # Criando as abas clássicas idênticas
                 tab1, tab2 = st.tabs(["📊 Dados Originais Extraídos", "✨ Versão Modelada por IA"])
 
                 with tab1:
@@ -53,7 +51,7 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                         st.warning("Nenhuma tag oculta encontrada neste vídeo específico.")
 
                 with tab2:
-                    # 2. Conectando à API do Gemini para recriar o conteúdo (Modelo Obrigatório Atualizado)
+                    # 2. Conectando à API do Gemini para recriar o conteúdo (Modelo Oficial 3.8)
                     client = genai.Client(api_key=api_key)
                     
                     prompt_texto = f"""
@@ -64,7 +62,7 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     Faça o seguinte:
                     1. Crie 3 opções de títulos altamente chamativos (focados em clickbait saudável e retenção).
                     2. Reescreva a descrição inteira otimizando para o SEO do YouTube, incluindo parágrafos explicativos e sugestões de marcações de tempo estruturadas.
-                    3. Escreva um prompt detalhado em INGLÊS para um gerador de imagens criar uma capa/thumbnail conceitual semelhante e moderna sobre este tema.
+                    3. Escreva um prompt muito detalhado e completo EM INGLÊS com mais de 30 palavras para um gerador de imagens criar uma capa/thumbnail conceitual semelhante e moderna sobre este tema.
                     
                     Responda estritamente separando os blocos com: [TITULOS], [DESCRICAO], [PROMPT_CAPA].
                     """
@@ -76,15 +74,16 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     
                     resultado_ia = response.text
                     
-                    # Separando as respostas da IA de forma simples
+                    # Separando as respostas da IA de forma limpa
                     try:
                         titulos_novos = resultado_ia.split("[TITULOS]")[1].split("[DESCRICAO]")[0].strip()
                         desc_nova = resultado_ia.split("[DESCRICAO]")[1].split("[PROMPT_CAPA]")[0].strip()
                         prompt_capa = resultado_ia.split("[PROMPT_CAPA]")[1].strip()
                     except:
-                        titulos_novos = "Abra o texto abaixo para ver o conteúdo gerado."
+                        # Caso a IA mude a formatação, exibe o texto corrido para não quebrar
+                        titulos_novos = "Veja o bloco completo abaixo."
                         desc_nova = resultado_ia
-                        prompt_capa = "Modern YouTube thumbnail background about " + titulo_original
+                        prompt_capa = f"A vibrant and eye-catching YouTube thumbnail background about {titulo_original}, gaming style, hyper-detailed, 4k."
 
                     st.subheader("🔥 3 Novas Opções de Títulos")
                     st.code(titulos_novos, language="")
@@ -92,17 +91,10 @@ if st.button("Analisar e Modelar Vídeo") and url_video:
                     st.subheader("📝 Nova Descrição Otimizada (SEO)")
                     st.text_area("", value=desc_nova, height=250)
                     
-                    st.subheader("📋 Prompt da Capa Gerado (Em Inglês)")
+                    # A MUDANÇA: Agora o prompt em inglês sai inteiro e livre de cortes, sem links com erro
+                    st.subheader("📋 Prompt Completo da Capa (Em Inglês)")
+                    st.info("Copie o texto da caixa abaixo e cole no ChatGPT, Leonardo AI ou qualquer outra IA para gerar sua imagem:")
                     st.code(prompt_capa, language="")
-
-                    st.subheader("🖼️ Link de Texto da sua Nova Capa")
-                    # Cria o link da imagem limpando o texto de forma simples e direta
-                    titulo_limpo = "".join(c for c in titulo_original if c.isalnum() or c==' ').replace(" ", "-")
-                    url_da_imagem = f"https://pollinations.ai{titulo_limpo}?width=1280&height=720&nologo=true"
-                    
-                    # Exibe o link bruto em formato de texto para você copiar e colar no Chrome do celular sem bloqueios
-                    st.info("Copie o endereço de texto abaixo e cole na barra de pesquisa do seu navegador para abrir a imagem:")
-                    st.code(url_da_imagem, language="")
 
             except Exception as e:
                 st.error(f"Ocorreu um erro ao processar o link. Verifique se a URL está correta. Detalhes: {e}")
